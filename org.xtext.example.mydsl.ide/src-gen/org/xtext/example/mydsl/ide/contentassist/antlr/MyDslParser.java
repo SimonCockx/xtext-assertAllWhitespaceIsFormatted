@@ -31,7 +31,16 @@ public class MyDslParser extends AbstractContentAssistParser {
 		}
 		
 		private static void init(ImmutableMap.Builder<AbstractElement, String> builder, MyDslGrammarAccess grammarAccess) {
+			builder.put(grammarAccess.getPrimaryAccess().getAlternatives(), "rule__Primary__Alternatives");
 			builder.put(grammarAccess.getModelAccess().getGroup(), "rule__Model__Group__0");
+			builder.put(grammarAccess.getExistsOperationAccess().getGroup(), "rule__ExistsOperation__Group__0");
+			builder.put(grammarAccess.getExistsOperationAccess().getGroup_1(), "rule__ExistsOperation__Group_1__0");
+			builder.put(grammarAccess.getExistsOperationAccess().getGroup_1_0(), "rule__ExistsOperation__Group_1_0__0");
+			builder.put(grammarAccess.getPrimaryAccess().getGroup_0(), "rule__Primary__Group_0__0");
+			builder.put(grammarAccess.getPrimaryAccess().getGroup_1(), "rule__Primary__Group_1__0");
+			builder.put(grammarAccess.getModelAccess().getExprsAssignment_2(), "rule__Model__ExprsAssignment_2");
+			builder.put(grammarAccess.getPrimaryAccess().getConditionAssignment_1_2(), "rule__Primary__ConditionAssignment_1_2");
+			builder.put(grammarAccess.getPrimaryAccess().getThenAssignment_1_4(), "rule__Primary__ThenAssignment_1_4");
 		}
 	}
 	

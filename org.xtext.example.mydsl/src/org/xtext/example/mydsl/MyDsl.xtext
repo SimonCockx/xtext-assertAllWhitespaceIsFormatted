@@ -3,5 +3,19 @@ grammar org.xtext.example.mydsl.MyDsl with org.eclipse.xtext.common.Terminals
 generate myDsl "http://www.xtext.org/example/mydsl/MyDsl"
 
 Model:
-	{Model} 'Hello'
+	('Expression' ':'
+	exprs+=Expression)*
+;
+
+Expression:
+	ExistsOperation
+;
+
+ExistsOperation returns Expression:
+	Primary =>({ExistsOperation.argument=current} 'exists')*
+;
+
+Primary returns Expression:
+	{BooleanLiteral} 'True'
+	| {ConditionalExpression} 'if' condition=Expression 'then' then=Expression
 ;

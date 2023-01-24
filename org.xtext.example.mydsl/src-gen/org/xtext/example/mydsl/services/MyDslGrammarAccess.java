@@ -7,11 +7,14 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.util.List;
 import org.eclipse.xtext.Action;
+import org.eclipse.xtext.Alternatives;
+import org.eclipse.xtext.Assignment;
 import org.eclipse.xtext.Grammar;
 import org.eclipse.xtext.GrammarUtil;
 import org.eclipse.xtext.Group;
 import org.eclipse.xtext.Keyword;
 import org.eclipse.xtext.ParserRule;
+import org.eclipse.xtext.RuleCall;
 import org.eclipse.xtext.TerminalRule;
 import org.eclipse.xtext.common.services.TerminalsGrammarAccess;
 import org.eclipse.xtext.service.AbstractElementFinder;
@@ -23,26 +26,141 @@ public class MyDslGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 	public class ModelElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.mydsl.MyDsl.Model");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Action cModelAction_0 = (Action)cGroup.eContents().get(0);
-		private final Keyword cHelloKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Keyword cExpressionKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Keyword cColonKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cExprsAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cExprsExpressionParserRuleCall_2_0 = (RuleCall)cExprsAssignment_2.eContents().get(0);
 		
 		//Model:
-		//    {Model} 'Hello'
+		//    ('Expression' ':'
+		//    exprs+=Expression)*
 		//;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//{Model} 'Hello'
+		//('Expression' ':'
+		//exprs+=Expression)*
 		public Group getGroup() { return cGroup; }
 		
-		//{Model}
-		public Action getModelAction_0() { return cModelAction_0; }
+		//'Expression'
+		public Keyword getExpressionKeyword_0() { return cExpressionKeyword_0; }
 		
-		//'Hello'
-		public Keyword getHelloKeyword_1() { return cHelloKeyword_1; }
+		//':'
+		public Keyword getColonKeyword_1() { return cColonKeyword_1; }
+		
+		//exprs+=Expression
+		public Assignment getExprsAssignment_2() { return cExprsAssignment_2; }
+		
+		//Expression
+		public RuleCall getExprsExpressionParserRuleCall_2_0() { return cExprsExpressionParserRuleCall_2_0; }
+	}
+	public class ExpressionElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.mydsl.MyDsl.Expression");
+		private final RuleCall cExistsOperationParserRuleCall = (RuleCall)rule.eContents().get(1);
+		
+		//Expression:
+		//    ExistsOperation
+		//;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//ExistsOperation
+		public RuleCall getExistsOperationParserRuleCall() { return cExistsOperationParserRuleCall; }
+	}
+	public class ExistsOperationElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.mydsl.MyDsl.ExistsOperation");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final RuleCall cPrimaryParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Group cGroup_1_0 = (Group)cGroup_1.eContents().get(0);
+		private final Action cExistsOperationArgumentAction_1_0_0 = (Action)cGroup_1_0.eContents().get(0);
+		private final Keyword cExistsKeyword_1_0_1 = (Keyword)cGroup_1_0.eContents().get(1);
+		
+		//ExistsOperation returns Expression:
+		//    Primary =>({ExistsOperation.argument=current} 'exists')*
+		//;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//Primary =>({ExistsOperation.argument=current} 'exists')*
+		public Group getGroup() { return cGroup; }
+		
+		//Primary
+		public RuleCall getPrimaryParserRuleCall_0() { return cPrimaryParserRuleCall_0; }
+		
+		//=>({ExistsOperation.argument=current} 'exists')*
+		public Group getGroup_1() { return cGroup_1; }
+		
+		//{ExistsOperation.argument=current} 'exists'
+		public Group getGroup_1_0() { return cGroup_1_0; }
+		
+		//{ExistsOperation.argument=current}
+		public Action getExistsOperationArgumentAction_1_0_0() { return cExistsOperationArgumentAction_1_0_0; }
+		
+		//'exists'
+		public Keyword getExistsKeyword_1_0_1() { return cExistsKeyword_1_0_1; }
+	}
+	public class PrimaryElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.mydsl.MyDsl.Primary");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
+		private final Action cBooleanLiteralAction_0_0 = (Action)cGroup_0.eContents().get(0);
+		private final Keyword cTrueKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
+		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
+		private final Action cConditionalExpressionAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Keyword cIfKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
+		private final Assignment cConditionAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
+		private final RuleCall cConditionExpressionParserRuleCall_1_2_0 = (RuleCall)cConditionAssignment_1_2.eContents().get(0);
+		private final Keyword cThenKeyword_1_3 = (Keyword)cGroup_1.eContents().get(3);
+		private final Assignment cThenAssignment_1_4 = (Assignment)cGroup_1.eContents().get(4);
+		private final RuleCall cThenExpressionParserRuleCall_1_4_0 = (RuleCall)cThenAssignment_1_4.eContents().get(0);
+		
+		//Primary returns Expression:
+		//    {BooleanLiteral} 'True'
+		//    | {ConditionalExpression} 'if' condition=Expression 'then' then=Expression
+		//;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//{BooleanLiteral} 'True'
+		//| {ConditionalExpression} 'if' condition=Expression 'then' then=Expression
+		public Alternatives getAlternatives() { return cAlternatives; }
+		
+		//{BooleanLiteral} 'True'
+		public Group getGroup_0() { return cGroup_0; }
+		
+		//{BooleanLiteral}
+		public Action getBooleanLiteralAction_0_0() { return cBooleanLiteralAction_0_0; }
+		
+		//'True'
+		public Keyword getTrueKeyword_0_1() { return cTrueKeyword_0_1; }
+		
+		//{ConditionalExpression} 'if' condition=Expression 'then' then=Expression
+		public Group getGroup_1() { return cGroup_1; }
+		
+		//{ConditionalExpression}
+		public Action getConditionalExpressionAction_1_0() { return cConditionalExpressionAction_1_0; }
+		
+		//'if'
+		public Keyword getIfKeyword_1_1() { return cIfKeyword_1_1; }
+		
+		//condition=Expression
+		public Assignment getConditionAssignment_1_2() { return cConditionAssignment_1_2; }
+		
+		//Expression
+		public RuleCall getConditionExpressionParserRuleCall_1_2_0() { return cConditionExpressionParserRuleCall_1_2_0; }
+		
+		//'then'
+		public Keyword getThenKeyword_1_3() { return cThenKeyword_1_3; }
+		
+		//then=Expression
+		public Assignment getThenAssignment_1_4() { return cThenAssignment_1_4; }
+		
+		//Expression
+		public RuleCall getThenExpressionParserRuleCall_1_4_0() { return cThenExpressionParserRuleCall_1_4_0; }
 	}
 	
 	
 	private final ModelElements pModel;
+	private final ExpressionElements pExpression;
+	private final ExistsOperationElements pExistsOperation;
+	private final PrimaryElements pPrimary;
 	
 	private final Grammar grammar;
 	
@@ -54,6 +172,9 @@ public class MyDslGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 		this.grammar = internalFindGrammar(grammarProvider);
 		this.gaTerminals = gaTerminals;
 		this.pModel = new ModelElements();
+		this.pExpression = new ExpressionElements();
+		this.pExistsOperation = new ExistsOperationElements();
+		this.pPrimary = new PrimaryElements();
 	}
 	
 	protected Grammar internalFindGrammar(GrammarProvider grammarProvider) {
@@ -84,7 +205,8 @@ public class MyDslGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 
 	
 	//Model:
-	//    {Model} 'Hello'
+	//    ('Expression' ':'
+	//    exprs+=Expression)*
 	//;
 	public ModelElements getModelAccess() {
 		return pModel;
@@ -92,6 +214,40 @@ public class MyDslGrammarAccess extends AbstractElementFinder.AbstractGrammarEle
 	
 	public ParserRule getModelRule() {
 		return getModelAccess().getRule();
+	}
+	
+	//Expression:
+	//    ExistsOperation
+	//;
+	public ExpressionElements getExpressionAccess() {
+		return pExpression;
+	}
+	
+	public ParserRule getExpressionRule() {
+		return getExpressionAccess().getRule();
+	}
+	
+	//ExistsOperation returns Expression:
+	//    Primary =>({ExistsOperation.argument=current} 'exists')*
+	//;
+	public ExistsOperationElements getExistsOperationAccess() {
+		return pExistsOperation;
+	}
+	
+	public ParserRule getExistsOperationRule() {
+		return getExistsOperationAccess().getRule();
+	}
+	
+	//Primary returns Expression:
+	//    {BooleanLiteral} 'True'
+	//    | {ConditionalExpression} 'if' condition=Expression 'then' then=Expression
+	//;
+	public PrimaryElements getPrimaryAccess() {
+		return pPrimary;
+	}
+	
+	public ParserRule getPrimaryRule() {
+		return getPrimaryAccess().getRule();
 	}
 	
 	//terminal ID: '^'?('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;

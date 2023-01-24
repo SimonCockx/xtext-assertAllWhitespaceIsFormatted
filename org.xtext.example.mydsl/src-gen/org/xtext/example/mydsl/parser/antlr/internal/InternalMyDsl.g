@@ -76,17 +76,194 @@ ruleModel returns [EObject current=null]
 	leaveRule();
 }:
 	(
+		otherlv_0='Expression'
+		{
+			newLeafNode(otherlv_0, grammarAccess.getModelAccess().getExpressionKeyword_0());
+		}
+		otherlv_1=':'
+		{
+			newLeafNode(otherlv_1, grammarAccess.getModelAccess().getColonKeyword_1());
+		}
 		(
+			(
+				{
+					newCompositeNode(grammarAccess.getModelAccess().getExprsExpressionParserRuleCall_2_0());
+				}
+				lv_exprs_2_0=ruleExpression
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getModelRule());
+					}
+					add(
+						$current,
+						"exprs",
+						lv_exprs_2_0,
+						"org.xtext.example.mydsl.MyDsl.Expression");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+	)*
+;
+
+// Entry rule entryRuleExpression
+entryRuleExpression returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getExpressionRule()); }
+	iv_ruleExpression=ruleExpression
+	{ $current=$iv_ruleExpression.current; }
+	EOF;
+
+// Rule Expression
+ruleExpression returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	{
+		newCompositeNode(grammarAccess.getExpressionAccess().getExistsOperationParserRuleCall());
+	}
+	this_ExistsOperation_0=ruleExistsOperation
+	{
+		$current = $this_ExistsOperation_0.current;
+		afterParserOrEnumRuleCall();
+	}
+;
+
+// Entry rule entryRuleExistsOperation
+entryRuleExistsOperation returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getExistsOperationRule()); }
+	iv_ruleExistsOperation=ruleExistsOperation
+	{ $current=$iv_ruleExistsOperation.current; }
+	EOF;
+
+// Rule ExistsOperation
+ruleExistsOperation returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		{
+			newCompositeNode(grammarAccess.getExistsOperationAccess().getPrimaryParserRuleCall_0());
+		}
+		this_Primary_0=rulePrimary
+		{
+			$current = $this_Primary_0.current;
+			afterParserOrEnumRuleCall();
+		}
+		(
+			((
+				(
+				)
+				'exists'
+			)
+			)=>
+			(
+				(
+					{
+						$current = forceCreateModelElementAndSet(
+							grammarAccess.getExistsOperationAccess().getExistsOperationArgumentAction_1_0_0(),
+							$current);
+					}
+				)
+				otherlv_2='exists'
+				{
+					newLeafNode(otherlv_2, grammarAccess.getExistsOperationAccess().getExistsKeyword_1_0_1());
+				}
+			)
+		)*
+	)
+;
+
+// Entry rule entryRulePrimary
+entryRulePrimary returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getPrimaryRule()); }
+	iv_rulePrimary=rulePrimary
+	{ $current=$iv_rulePrimary.current; }
+	EOF;
+
+// Rule Primary
+rulePrimary returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			(
+				{
+					$current = forceCreateModelElement(
+						grammarAccess.getPrimaryAccess().getBooleanLiteralAction_0_0(),
+						$current);
+				}
+			)
+			otherlv_1='True'
 			{
-				$current = forceCreateModelElement(
-					grammarAccess.getModelAccess().getModelAction_0(),
-					$current);
+				newLeafNode(otherlv_1, grammarAccess.getPrimaryAccess().getTrueKeyword_0_1());
 			}
 		)
-		otherlv_1='Hello'
-		{
-			newLeafNode(otherlv_1, grammarAccess.getModelAccess().getHelloKeyword_1());
-		}
+		    |
+		(
+			(
+				{
+					$current = forceCreateModelElement(
+						grammarAccess.getPrimaryAccess().getConditionalExpressionAction_1_0(),
+						$current);
+				}
+			)
+			otherlv_3='if'
+			{
+				newLeafNode(otherlv_3, grammarAccess.getPrimaryAccess().getIfKeyword_1_1());
+			}
+			(
+				(
+					{
+						newCompositeNode(grammarAccess.getPrimaryAccess().getConditionExpressionParserRuleCall_1_2_0());
+					}
+					lv_condition_4_0=ruleExpression
+					{
+						if ($current==null) {
+							$current = createModelElementForParent(grammarAccess.getPrimaryRule());
+						}
+						set(
+							$current,
+							"condition",
+							lv_condition_4_0,
+							"org.xtext.example.mydsl.MyDsl.Expression");
+						afterParserOrEnumRuleCall();
+					}
+				)
+			)
+			otherlv_5='then'
+			{
+				newLeafNode(otherlv_5, grammarAccess.getPrimaryAccess().getThenKeyword_1_3());
+			}
+			(
+				(
+					{
+						newCompositeNode(grammarAccess.getPrimaryAccess().getThenExpressionParserRuleCall_1_4_0());
+					}
+					lv_then_6_0=ruleExpression
+					{
+						if ($current==null) {
+							$current = createModelElementForParent(grammarAccess.getPrimaryRule());
+						}
+						set(
+							$current,
+							"then",
+							lv_then_6_0,
+							"org.xtext.example.mydsl.MyDsl.Expression");
+						afterParserOrEnumRuleCall();
+					}
+				)
+			)
+		)
 	)
 ;
 

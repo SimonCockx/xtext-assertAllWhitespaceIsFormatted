@@ -11,7 +11,12 @@ import org.eclipse.xtext.Action;
 import org.eclipse.xtext.Parameter;
 import org.eclipse.xtext.ParserRule;
 import org.eclipse.xtext.serializer.ISerializationContext;
+import org.eclipse.xtext.serializer.acceptor.SequenceFeeder;
 import org.eclipse.xtext.serializer.sequencer.AbstractDelegatingSemanticSequencer;
+import org.eclipse.xtext.serializer.sequencer.ITransientValueService.ValueTransient;
+import org.xtext.example.mydsl.myDsl.BooleanLiteral;
+import org.xtext.example.mydsl.myDsl.ConditionalExpression;
+import org.xtext.example.mydsl.myDsl.ExistsOperation;
 import org.xtext.example.mydsl.myDsl.Model;
 import org.xtext.example.mydsl.myDsl.MyDslPackage;
 import org.xtext.example.mydsl.services.MyDslGrammarAccess;
@@ -30,6 +35,15 @@ public class MyDslSemanticSequencer extends AbstractDelegatingSemanticSequencer 
 		Set<Parameter> parameters = context.getEnabledBooleanParameters();
 		if (epackage == MyDslPackage.eINSTANCE)
 			switch (semanticObject.eClass().getClassifierID()) {
+			case MyDslPackage.BOOLEAN_LITERAL:
+				sequence_Primary(context, (BooleanLiteral) semanticObject); 
+				return; 
+			case MyDslPackage.CONDITIONAL_EXPRESSION:
+				sequence_Primary(context, (ConditionalExpression) semanticObject); 
+				return; 
+			case MyDslPackage.EXISTS_OPERATION:
+				sequence_ExistsOperation(context, (ExistsOperation) semanticObject); 
+				return; 
 			case MyDslPackage.MODEL:
 				sequence_Model(context, (Model) semanticObject); 
 				return; 
@@ -41,14 +55,79 @@ public class MyDslSemanticSequencer extends AbstractDelegatingSemanticSequencer 
 	/**
 	 * <pre>
 	 * Contexts:
+	 *     Expression returns ExistsOperation
+	 *     ExistsOperation returns ExistsOperation
+	 *     ExistsOperation.ExistsOperation_1_0_0 returns ExistsOperation
+	 *
+	 * Constraint:
+	 *     argument=ExistsOperation_ExistsOperation_1_0_0
+	 * </pre>
+	 */
+	protected void sequence_ExistsOperation(ISerializationContext context, ExistsOperation semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, MyDslPackage.Literals.EXISTS_OPERATION__ARGUMENT) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MyDslPackage.Literals.EXISTS_OPERATION__ARGUMENT));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getExistsOperationAccess().getExistsOperationArgumentAction_1_0_0(), semanticObject.getArgument());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
 	 *     Model returns Model
 	 *
 	 * Constraint:
-	 *     {Model}
+	 *     exprs+=Expression+
 	 * </pre>
 	 */
 	protected void sequence_Model(ISerializationContext context, Model semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     Expression returns BooleanLiteral
+	 *     ExistsOperation returns BooleanLiteral
+	 *     ExistsOperation.ExistsOperation_1_0_0 returns BooleanLiteral
+	 *     Primary returns BooleanLiteral
+	 *
+	 * Constraint:
+	 *     {BooleanLiteral}
+	 * </pre>
+	 */
+	protected void sequence_Primary(ISerializationContext context, BooleanLiteral semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     Expression returns ConditionalExpression
+	 *     ExistsOperation returns ConditionalExpression
+	 *     ExistsOperation.ExistsOperation_1_0_0 returns ConditionalExpression
+	 *     Primary returns ConditionalExpression
+	 *
+	 * Constraint:
+	 *     (condition=Expression then=Expression)
+	 * </pre>
+	 */
+	protected void sequence_Primary(ISerializationContext context, ConditionalExpression semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, MyDslPackage.Literals.CONDITIONAL_EXPRESSION__CONDITION) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MyDslPackage.Literals.CONDITIONAL_EXPRESSION__CONDITION));
+			if (transientValues.isValueTransient(semanticObject, MyDslPackage.Literals.CONDITIONAL_EXPRESSION__THEN) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MyDslPackage.Literals.CONDITIONAL_EXPRESSION__THEN));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getPrimaryAccess().getConditionExpressionParserRuleCall_1_2_0(), semanticObject.getCondition());
+		feeder.accept(grammarAccess.getPrimaryAccess().getThenExpressionParserRuleCall_1_4_0(), semanticObject.getThen());
+		feeder.finish();
 	}
 	
 	

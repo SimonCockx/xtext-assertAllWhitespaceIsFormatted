@@ -66,6 +66,10 @@ public class MyDslFactoryImpl extends EFactoryImpl implements MyDslFactory
     switch (eClass.getClassifierID())
     {
       case MyDslPackage.MODEL: return createModel();
+      case MyDslPackage.EXPRESSION: return createExpression();
+      case MyDslPackage.EXISTS_OPERATION: return createExistsOperation();
+      case MyDslPackage.BOOLEAN_LITERAL: return createBooleanLiteral();
+      case MyDslPackage.CONDITIONAL_EXPRESSION: return createConditionalExpression();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -81,6 +85,54 @@ public class MyDslFactoryImpl extends EFactoryImpl implements MyDslFactory
   {
     ModelImpl model = new ModelImpl();
     return model;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Expression createExpression()
+  {
+    ExpressionImpl expression = new ExpressionImpl();
+    return expression;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public ExistsOperation createExistsOperation()
+  {
+    ExistsOperationImpl existsOperation = new ExistsOperationImpl();
+    return existsOperation;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public BooleanLiteral createBooleanLiteral()
+  {
+    BooleanLiteralImpl booleanLiteral = new BooleanLiteralImpl();
+    return booleanLiteral;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public ConditionalExpression createConditionalExpression()
+  {
+    ConditionalExpressionImpl conditionalExpression = new ConditionalExpressionImpl();
+    return conditionalExpression;
   }
 
   /**
